@@ -5,8 +5,8 @@
 
 $Id$
 """
-
-from __future__ import print_function, unicode_literals, absolute_import, division
+# NOTE: Not importing unicode_literals under py2, we need native strings.
+from __future__ import print_function, absolute_import, division
 __docformat__ = "restructuredtext en"
 
 
@@ -35,12 +35,12 @@ class NoseTracebackInfoPlugin(nose.plugins.Plugin):
 		# and generally more readable, but when the last part of the traceback
 		# is in initializing a module, then the filename is the only discriminator
 
-		# Note that we are joining with a byte string, not a unicode string. Under
+		# Note that we are joining with a native string, not a unicode string. Under
 		# python2, tracebacks are byte strings and mixing unicode at this level may
-		# result in UnicodeDecodeError
-		formatted_tb = b''.join(format_exception(t, v, tb, with_filenames=False))
-		if b'Module None' in formatted_tb:
-			formatted_tb = b''.join(format_exception(t, v, tb, with_filenames=True))
+		# result in UnicodeDecodeError, but under python3 tracebacks are unicode
+		formatted_tb = ''.join(format_exception(t, v, tb, with_filenames=False))
+		if 'Module None' in formatted_tb:
+			formatted_tb = ''.join(format_exception(t, v, tb, with_filenames=True))
 		return (t, formatted_tb, None)
 
 	def formatFailure(self, test, exc_info):
