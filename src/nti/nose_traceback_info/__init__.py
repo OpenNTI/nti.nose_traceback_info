@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+A nose plugin for annotating failure and logged tracebacks using the
+Zope/Paste/WebError conventions.
 
-
-$Id$
 """
 # NOTE: Not importing unicode_literals under py2, we need native strings.
 from __future__ import print_function, absolute_import, division
@@ -13,24 +13,60 @@ __docformat__ = "restructuredtext en"
 import nose.plugins
 
 class NoseTracebackInfoPlugin(nose.plugins.Plugin):
+	"""
+	Format logged and failure tracebacks using the Zope formatter, thus
+	capturing additional information.
+	"""
 
-	name = 'nose_traceback_info'
+	name = 'traceback_info'
 	score = 1000
+
 	enabled = True # Enabled by default
+	enable_logcapture = True
+	with_filenames = True
 
-	def configure(self, options, conf ):
-		# Force the logcapture plugin, enabled by default,
-		# to use the zope exception formatter.
-		import zope.exceptions.log
-		import logging
-		logging.Formatter = zope.exceptions.log.Formatter
+	def options(self, parser, env):
+		# Match defaults
+		if 'NOSE_WITH_TRACEBACK_INFO' not in env:
+			env['NOSE_WITH_TRACEBACK_INFO'] = str(self.enabled)
 
-	# Also present failure cases formatted the same way
+		super(NoseTracebackInfoPlugin,self).options(parser, env)
+
+		parser.add_option(
+			"--nowith-traceback_info",
+			action="store_false",
+			dest=self.enableOpt,
+			help="Disable plugin" )
+		parser.add_option(
+			"--traceback-long-filenames",
+			action='store_false',
+			dest='traceback_with_filenames',
+			default=True,
+			help="Use complete filenames, not module names, in formatted tracebacks" )
+		parser.add_option(
+			'--traceback-nologcapture',
+			action='store_false',
+			dest='traceback_enable_logcapture',
+			default=True,
+			help="Do not format tracebacks captured in logs" )
+
+	def configure(self, options, conf):
+		super(NoseTracebackInfoPlugin,self).configure(options,conf)
+		if not self.enabled:
+			return
+		self.with_filenames = getattr(options, 'traceback_with_filenames', self.with_filenames)
+		self.enable_logcapture = getattr(options, 'traceback_enable_logcapture', self.enable_logcapture)
+		if self.enable_logcapture:
+			# Force the logcapture plugin, enabled by default,
+			# to use the zope exception formatter.
+			import zope.exceptions.log
+			import logging
+			logging.Formatter = zope.exceptions.log.Formatter
+
 	def formatError(self, test, exc_info):
 		t, v, tb = exc_info
 		from zope.exceptions.exceptionformatter import format_exception
-		# Despite what the docs say, you do not return the test.
-		# see logcapture and failuredetail.
+
 		# Omitting filenames makes things shorter
 		# and generally more readable, but when the last part of the traceback
 		# is in initializing a module, then the filename is the only discriminator
@@ -38,10 +74,10 @@ class NoseTracebackInfoPlugin(nose.plugins.Plugin):
 		# Note that we are joining with a native string, not a unicode string. Under
 		# python2, tracebacks are byte strings and mixing unicode at this level may
 		# result in UnicodeDecodeError, but under python3 tracebacks are unicode
-		formatted_tb = ''.join(format_exception(t, v, tb, with_filenames=False))
+		formatted_tb = ''.join(format_exception(t, v, tb, with_filenames=self.with_filenames))
 		if 'Module None' in formatted_tb:
 			formatted_tb = ''.join(format_exception(t, v, tb, with_filenames=True))
-		return (t, formatted_tb, None)
+		return (t, formatted_tb, tb)
 
 	def formatFailure(self, test, exc_info):
-		return self.formatError( test, exc_info)
+		return self.formatError(test, exc_info)
