@@ -37,5 +37,6 @@ setup(
 	install_requires=[
 		'nose >= 1.3.0',
 		'zope.exceptions >= 4.0.6'
-	]
+	],
+	entry_points=entry_points
 )
