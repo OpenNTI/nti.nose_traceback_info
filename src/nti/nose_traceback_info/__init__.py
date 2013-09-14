@@ -39,9 +39,9 @@ class NoseTracebackInfoPlugin(nose.plugins.Plugin):
 			help="Disable plugin" )
 		parser.add_option(
 			"--traceback-long-filenames",
-			action='store_false',
+			action='store_true',
 			dest='traceback_with_filenames',
-			default=True,
+			default=False,
 			help="Use complete filenames, not module names, in formatted tracebacks" )
 		parser.add_option(
 			'--traceback-nologcapture',
