@@ -37,8 +37,10 @@ setup(
 	packages=find_packages('src'),
 	package_dir={'': 'src'},
 	install_requires=[
+		'setuptools',
 		'nose >= 1.3.0',
 		'zope.exceptions >= 4.0.6'
 	],
+	namespace_packages=['nti'],
 	entry_points=entry_points
 )
