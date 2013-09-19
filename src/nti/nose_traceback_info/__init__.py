@@ -77,7 +77,10 @@ class NoseTracebackInfoPlugin(nose.plugins.Plugin):
 		formatted_tb = ''.join(format_exception(t, v, tb, with_filenames=self.with_filenames))
 		if 'Module None' in formatted_tb:
 			formatted_tb = ''.join(format_exception(t, v, tb, with_filenames=True))
-		return (t, formatted_tb, tb)
+		# Returning none for the traceback is what lets us trump
+		# the earlier plugins. Otherwise we end up with
+		# multiple copies
+		return (t, formatted_tb, None)
 
 	def formatFailure(self, test, exc_info):
 		return self.formatError(test, exc_info)
