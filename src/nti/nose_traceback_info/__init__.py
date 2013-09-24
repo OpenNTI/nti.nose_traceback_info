@@ -18,7 +18,7 @@ class NoseTracebackInfoPlugin(nose.plugins.Plugin):
 	capturing additional information.
 	"""
 
-	name = 'traceback_info'
+	name = 'traceback-info'
 	score = 1000
 
 	enabled = True # Enabled by default
@@ -33,7 +33,7 @@ class NoseTracebackInfoPlugin(nose.plugins.Plugin):
 		super(NoseTracebackInfoPlugin,self).options(parser, env)
 
 		parser.add_option(
-			"--nowith-traceback_info",
+			"--nowith-traceback-info",
 			action="store_false",
 			dest=self.enableOpt,
 			help="Disable plugin" )
@@ -52,7 +52,7 @@ class NoseTracebackInfoPlugin(nose.plugins.Plugin):
 
 	def configure(self, options, conf):
 		super(NoseTracebackInfoPlugin,self).configure(options,conf)
-		if not self.enabled:
+		if not self.enabled: # pragma: no cover
 			return
 		self.with_filenames = getattr(options, 'traceback_with_filenames', self.with_filenames)
 		self.enable_logcapture = getattr(options, 'traceback_enable_logcapture', self.enable_logcapture)

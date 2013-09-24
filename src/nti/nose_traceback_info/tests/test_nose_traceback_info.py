@@ -25,7 +25,7 @@ from nose.proxy import ResultProxy
 
 class TestNoseTracebackInfoPlugin(PluginTester,TestCase):
 
-	activate = '--with-traceback_info'
+	activate = '--with-traceback-info'
 	plugins = [NoseTracebackInfoPlugin()]
 	ignoreFiles = True
 
