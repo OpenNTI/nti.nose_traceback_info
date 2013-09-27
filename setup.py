@@ -13,27 +13,28 @@ entry_points = {
 }
 
 setup(
-    name = 'nti.nose_traceback_info',
-    version = VERSION,
-    author = 'Jason Madden',
-    author_email = 'open-source@nextthought.com',
-    description = ('Include __traceback_info__ in tracebacks printed by nose'),
-    long_description = codecs.open('README.rst', encoding='utf-8').read(),
-    license = 'GNU LGPL',
-    keywords = 'nose exceptions zope',
-    url = 'https://github.com/NextThought/nti.nose_traceback_info',
-    classifiers = [
-        'Development Status :: 5 - Production/Stable',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)',
-        'Natural Language :: English',
-        'Operating System :: OS Independent',
+	name = 'nti.nose_traceback_info',
+	version = VERSION,
+	author = 'Jason Madden',
+	author_email = 'open-source@nextthought.com',
+	description = ('Include __traceback_info__ in tracebacks printed by nose'),
+	long_description = codecs.open('README.rst', encoding='utf-8').read(),
+	license = 'Apache',
+	keywords = 'nose exceptions zope',
+	url = 'https://github.com/NextThought/nti.nose_traceback_info',
+	classifiers = [
+		'Development Status :: 5 - Production/Stable',
+		'Intended Audience :: Developers',
+		'License :: OSI Approved :: Apache Software License',
+		'Natural Language :: English',
+		'Operating System :: OS Independent',
 		'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
+		'Programming Language :: Python :: 2.7',
 		'Programming Language :: Python :: 3',
 		'Programming Language :: Python :: 3.3',
-        'Topic :: Software Development :: Testing'
-        ],
+		'Topic :: Software Development :: Testing',
+		'Framework :: Zope3'
+		],
 	packages=find_packages('src'),
 	package_dir={'': 'src'},
 	install_requires=[
