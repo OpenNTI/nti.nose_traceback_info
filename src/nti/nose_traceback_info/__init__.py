@@ -74,7 +74,16 @@ class NoseTracebackInfoPlugin(nose.plugins.Plugin):
 		# Note that we are joining with a native string, not a unicode string. Under
 		# python2, tracebacks are byte strings and mixing unicode at this level may
 		# result in UnicodeDecodeError, but under python3 tracebacks are unicode
-		formatted_tb = ''.join(format_exception(t, v, tb, with_filenames=self.with_filenames))
+		lines = format_exception(t, v, tb, with_filenames=self.with_filenames)
+		try:
+			formatted_tb = ''.join( lines )
+		except UnicodeDecodeError:
+			# One got here anyway. The formatted exception lines must have
+			# something funky in them
+			# So go all to unicode
+			lines = [l.decode('utf-8','replace') if isinstance(l,bytes) else l for l in lines]
+			# And then back to ascii
+			formatted_tb = ''.join( [l.encode('ascii', 'replace') for l in lines] )
 		if 'Module None' in formatted_tb:
 			formatted_tb = ''.join(format_exception(t, v, tb, with_filenames=True))
 		# Returning none for the traceback is what lets us trump
