@@ -32,9 +32,11 @@ class TestNoseTracebackInfoPlugin(PluginTester,TestCase):
 	def test_format_failure(self):
 		formatted = str(self.output)
 		__traceback_info__ = formatted
-		lines = formatted.split('\n')
+
+		lines = formatted.split(b'\n' if isinstance(formatted,bytes) else u'\n')
+
 		self.assertEqual( lines[-8].strip(), 'ValueError' )
-		self.assertEqual( lines[-9].strip(), '- __traceback_info__: abc' )
+		self.assertEqual( lines[-9].strip()[0:27], '- __traceback_info__: Child' )
 
 	def makeSuite(self):
 		# Only Nose's built-in suites use plugins
@@ -47,7 +49,9 @@ class TestNoseTracebackInfoPlugin(PluginTester,TestCase):
 		config = caller.f_locals['conf']
 		class TC(TestCase):
 			def runTest(self):
-				__traceback_info__ = 'abc'
+				# Include an already-decoded unicode apostrophe
+				# to test that decoding works correctly
+				__traceback_info__ = 'Child\xe2\x80\x99s'
 				raise ValueError
 		class Suite(TestSuite):
 			def run(self, result, debug=False):
