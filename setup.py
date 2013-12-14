@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 import codecs
 
-VERSION = '1.0.1a1'
+VERSION = '1.0.1'
 
 entry_points = {
 
@@ -18,7 +18,7 @@ setup(
 	author = 'Jason Madden',
 	author_email = 'open-source@nextthought.com',
 	description = ('Include __traceback_info__ in tracebacks printed by nose'),
-	long_description = codecs.open('README.rst', encoding='utf-8').read(),
+	long_description = codecs.open('README.rst', encoding='utf-8').read() + codecs.open('CHANGES.rst', encoding='utf-8').read(),
 	license = 'Apache',
 	keywords = 'nose exceptions zope',
 	url = 'https://github.com/NextThought/nti.nose_traceback_info',

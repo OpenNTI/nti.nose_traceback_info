@@ -20,7 +20,6 @@ from unittest import TestCase, TestSuite
 
 from nti.nose_traceback_info import NoseTracebackInfoPlugin
 from nose.plugins import PluginTester
-from nose.suite import ContextSuite
 from nose.proxy import ResultProxy
 
 class TestNoseTracebackInfoPlugin(PluginTester,TestCase):
@@ -58,3 +57,31 @@ class TestNoseTracebackInfoPlugin(PluginTester,TestCase):
 				result = ResultProxy(result, self._tests[0], config)
 				return super(Suite,self).run(result,debug=debug)
 		return Suite([TC()])
+
+class TestNoseTracebackInfoDirectly(TestCase):
+
+	def _check(self):
+		plugin = NoseTracebackInfoPlugin()
+		_, tb, _ = plugin.formatFailure( None, sys.exc_info() )
+		if isinstance(str(''),bytes): # py2
+			assert isinstance(tb,bytes)
+		else:
+			assert isinstance(tb, str)
+
+	def test_unicode_decoding(self):
+		# bytestring
+		try:
+			# \U0001f4a9 is pile-of-poo
+			# '\xff\xfe=\xd8\xa9\xdc' is its utf-16
+			# encoding
+			__traceback_info__ = b'Childs \xff\xfe=\xd8\xa9\xdc'
+			raise ValueError
+		except ValueError:
+			self._check()
+
+		# Unicode
+		try:
+			__traceback_info__ = u'Childs \U0001f4a9'
+			raise ValueError
+		except ValueError:
+			self._check()
