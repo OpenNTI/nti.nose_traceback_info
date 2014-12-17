@@ -1,15 +1,13 @@
 #!/usr/bin/env python
-from setuptools import setup, find_packages
 import codecs
+from setuptools import setup, find_packages
 
-VERSION = '1.0.2a1'
+VERSION = '1.0.2'
 
 entry_points = {
-
 	"nose.plugins.0.10" : [
 		"nosetracebackinfo = nti.nose_traceback_info:NoseTracebackInfoPlugin"
 	],
-
 }
 
 setup(
