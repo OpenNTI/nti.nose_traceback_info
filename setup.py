@@ -2,7 +2,7 @@
 import codecs
 from setuptools import setup, find_packages
 
-VERSION = '1.0.2'
+VERSION = '1.0.3.dev0'
 
 entry_points = {
 	"nose.plugins.0.10" : [
