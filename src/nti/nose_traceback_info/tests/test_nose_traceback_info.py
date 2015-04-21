@@ -32,7 +32,7 @@ class TestNoseTracebackInfoPlugin(PluginTester,TestCase):
 		formatted = str(self.output)
 		__traceback_info__ = formatted
 
-		lines = formatted.split(b'\n' if isinstance(formatted,bytes) else u'\n')
+		lines = formatted.split(b'\n' if isinstance(formatted,bytes) else '\n')
 
 		self.assertEqual( lines[-8].strip(), 'ValueError' )
 		self.assertEqual( lines[-9].strip()[0:27], '- __traceback_info__: Child' )
@@ -79,9 +79,9 @@ class TestNoseTracebackInfoDirectly(TestCase):
 		except ValueError:
 			self._check()
 
-		# Unicode
+		# Unicode (recall unicode_literals is imported )
 		try:
-			__traceback_info__ = u'Childs \U0001f4a9'
+			__traceback_info__ = 'Childs \U0001f4a9'
 			raise ValueError
 		except ValueError:
 			self._check()
