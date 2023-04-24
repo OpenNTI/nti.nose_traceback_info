@@ -19,7 +19,7 @@ setup(
 	long_description = codecs.open('README.rst', encoding='utf-8').read() + '\n\n' + codecs.open('CHANGES.rst', encoding='utf-8').read(),
 	license = 'Apache',
 	keywords = 'nose exceptions zope',
-	url = 'https://github.com/NextThought/nti.nose_traceback_info',
+	url = 'https://github.com/OpenNTI/nti.nose_traceback_info',
 	classifiers = [
 		'Development Status :: 5 - Production/Stable',
 		'Intended Audience :: Developers',
